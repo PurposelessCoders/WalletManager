@@ -1,7 +1,9 @@
 package com.purposelesscoders.walletmanager;
 
 import android.os.Bundle;
+import android.accounts.*;
 import android.app.Activity;
+import android.util.Log;
 import android.view.Menu;
 
 public class MainActivity extends Activity {
@@ -10,6 +12,12 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		AccountManager am = AccountManager.get(getApplicationContext());
+		Account[] acs = am.getAccounts();
+		for (Account account : acs) {
+			Log.d("banane", "type : " + account.type + "\nName : " + account.name);
+		}
 	}
 
 	@Override
