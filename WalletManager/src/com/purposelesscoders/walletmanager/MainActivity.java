@@ -1,6 +1,7 @@
 package com.purposelesscoders.walletmanager;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.accounts.*;
 import android.app.Activity;
 import android.util.Log;
@@ -13,11 +14,25 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		AccountManager am = AccountManager.get(getApplicationContext());
-		Account[] acs = am.getAccounts();
-		for (Account account : acs) {
-			Log.d("banane", "type : " + account.type + "\nName : " + account.name);
+		AccountManager am = AccountManager.get(this);
+		Account[] accounts = am.getAccountsByType("com.google");
+		Account acc = null;
+		
+		//Il faudrait vérifier aussi s'il n'y a pas plusieurs comptes.
+		//Dans ce cas las il faut demander à l'utilisateurs de choisir le compte à utiliser.
+		if (accounts.length == 0)
+		{
+			Log.e("Google connect", "Accounts array is empty, there is probably no google account.");
+			finish();
 		}
+		else 
+		{
+			acc = accounts[0];
+			Log.d("Google connect", acc.name);
+		}
+		Bundle options = new Bundle();
+
+		am.getAuthToken(acc, "Manage your wallets", options, this, new OnTokenAcquired(), new Handler(new OnError()));
 	}
 
 	@Override
